@@ -5,7 +5,6 @@ const cookieParser = require("cookie-parser");
 const cors = require('cors');
 const errorHandler = require('./middlewares/errorMiddleware');
 const connectDB = require('./config/database');
-const path = require("path")
 const axios = require('axios')
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,7 +15,6 @@ connectDB();
 app.use(express.json());
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: true }));
-
 
 app.use(
     cors({
@@ -46,7 +44,6 @@ app.use(express.static(path.join(__dirname, '/client/dist')));
 app.get('/*splat', (req, res) => {
     res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 })
-
 
 // Start server
 app.listen(PORT, () => {
