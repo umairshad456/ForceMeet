@@ -211,62 +211,7 @@ const MeetingSetup = ({ setIsSetupComplete, isSetupComplete }) => {
     }
   };
 
-
   // Polling for approval status if a request was submitted
-  // useEffect(() => {
-  //   if (!call || !userId) return;
-  //   let interval;
-
-  //   const checkApprovalStatus = async () => {
-  //     try {
-  //       // console.log(`Polling for approval: callId=${call.id}, userId=${userId}`);
-
-  //       const response = await axiosInstance.get(`/api/meetings/checkAprrovalStatus/${call.id}/${userId}`);
-  //       const data = response.data;
-
-  //       // ============ if approved ====================
-  //       if (data.status === 'approved' && !isSetupComplete) {
-  //         if (isMicCamToggledOn) {
-  //           await call.camera.enable();
-  //           await call.microphone.enable();
-  //           setIsCameraReady(true);
-  //           setIsMicCamToggledOn(false);
-  //         }
-  //         else if (!isCameraReady) {
-  //           await call.camera.enable();
-  //           await call.microphone.enable();
-  //           setIsCameraReady(true);
-  //         }
-  //         // await call.join();
-  //         // setIsSetupComplete(true);
-
-  //         // stop polling once approved & joined
-  //         clearInterval(interval);
-  //         // ============ if pending ====================
-  //       } else if (data.status === 'pending') {
-  //         setIsRequestSubmitted(true);
-  //         setSubmissionStatusMessage('Your request is pending. Waiting for approval...');
-
-  //         // ============ if rejected ====================
-  //       } else if (data.status === 'rejected') {
-  //         setIsRequestSubmitted(false);
-  //         setSubmissionStatusMessage('Your request was rejected by the host.');
-  //         setShowJoinForm(true);
-  //       }
-  //       else {
-  //         setShowJoinForm(true);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error checking status:', error);
-  //       setShowJoinForm(true);
-  //     }
-  //   };
-
-  //   checkApprovalStatus();
-  //   interval = setInterval(checkApprovalStatus, 5000);
-  //   return () => clearInterval(interval);
-  // }, [call, userId]);
-
   useEffect(() => {
     if (!call || !userId) return;
     let interval;
@@ -291,11 +236,6 @@ const MeetingSetup = ({ setIsSetupComplete, isSetupComplete }) => {
             await call.microphone.enable();
             setIsCameraReady(true);
           }
-          // await call.join();
-          // setIsSetupComplete(true);
-
-          // stop polling once approved & joined
-          clearInterval(interval);
           // ============ if pending ====================
         } else if (data.status === 'pending') {
           setIsRequestSubmitted(true);
@@ -306,26 +246,22 @@ const MeetingSetup = ({ setIsSetupComplete, isSetupComplete }) => {
           setIsRequestSubmitted(false);
           setSubmissionStatusMessage('Your request was rejected by the host.');
           setShowJoinForm(true);
-          clearInterval(interval);
         }
         else {
           setShowJoinForm(true);
-          clearInterval(interval);
         }
       } catch (error) {
         console.error('Error checking status:', error);
         setShowJoinForm(true);
-        clearInterval(interval);
-
       }
     };
 
     checkApprovalStatus();
     interval = setInterval(checkApprovalStatus, 5000);
     return () => clearInterval(interval);
-  }, [call, userId, isSetupComplete, isMicCamToggledOn, isCameraReady]);
+  }, [call, userId]);
 
-
+  
   if (isCheckingUser) {
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center gap-3 text-white">
