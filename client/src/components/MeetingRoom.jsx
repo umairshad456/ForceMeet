@@ -133,8 +133,8 @@ const MeetingRoom = () => {
       {userEmail && (
         <div className="absolute top-4 left-1/2 z-50 rounded-md bg-gray-800 px-4 py-2 text-sm text-white shadow-md">
           {userEmail}
-          {userRole === 'host' && <span className="text-blue-400"> (host)</span> || "User"}
-          {userRole === 'cohost' && <span className="text-green-400"> (co-host)</span> || "User"}
+          {userRole === 'host' && <span className="text-blue-400"> (host)</span>}
+          {userRole === 'cohost' && <span className="text-green-400"> (co-host)</span>}
         </div>
       )}
 
