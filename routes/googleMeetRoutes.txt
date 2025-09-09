@@ -1,0 +1,68 @@
+const { google } = require("googleapis");
+const express = require("express");
+const router = express.Router();
+
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const REDIRECT_URI = "http://localhost:8000/api/google/callback";
+
+const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
+
+// Step 1: Redirect user to Google consent screen
+router.get("/auth", (req, res) => {
+    const url = oAuth2Client.generateAuthUrl({
+        access_type: "offline",
+        scope: ["https://www.googleapis.com/auth/calendar.events"],
+    });
+    res.redirect(url);
+});
+
+// Step 2: Google redirects here with code
+router.get("/callback", async (req, res) => {
+    const { code } = req.query;
+    // console.log("code", code)
+    const { tokens } = await oAuth2Client.getToken(code);
+    oAuth2Client.setCredentials(tokens);
+
+    // Save tokens in DB for user
+    res.send("Google auth successful ✅");
+});
+
+// Step 3: Create Meet link by creating Calendar event
+router.post("/create-meet", async (req, res) => {
+    try {
+        const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
+
+        const event = {
+            summary: "Test Meeting",
+            description: "Google Meet integration test",
+            start: {
+                dateTime: "2025-09-05T15:00:00Z",
+                timeZone: "Asia/Karachi",
+            },
+            end: {
+                dateTime: "2025-09-05T15:30:00Z",
+                timeZone: "Asia/Karachi",
+            },
+            conferenceData: {
+                createRequest: { requestId: "sample123" },
+            },
+            attendees: [{ email: "someone@example.com" }],
+        };
+
+        const response = await calendar.events.insert({
+            calendarId: "primary",
+            resource: event,
+            conferenceDataVersion: 1,
+        });
+
+        console.log("response", response)
+        const meetLink = response.data.hangoutLink;
+        res.json({ meetLink });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+module.exports = router;

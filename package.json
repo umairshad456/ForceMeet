@@ -1,0 +1,39 @@
+{
+  "name": "meet",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js",
+    "client": "npm run dev --prefix client",
+    "build": "npm run build --prefix client",
+    "install": "npm install && npm install --prefix client",
+    "build": "npm install && npm install --prefix client && npm run build --prefix client",
+    "start": "concurrently \"npm run dev\" \"npm run client\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": "",
+  "dependencies": {
+    "@stream-io/node-sdk": "^0.6.2",
+    "axios": "^1.11.0",
+    "bcryptjs": "^3.0.2",
+    "concurrently": "^9.2.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "googleapis": "^159.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.0",
+    "nodemailer": "^7.0.5",
+    "nodemon": "^3.1.10",
+    "openai": "^5.19.1",
+    "radix-ui": "^1.4.3",
+    "stream-chat": "^9.19.0",
+    "uuid": "^11.1.0"
+  }
+}

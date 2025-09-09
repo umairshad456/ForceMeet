@@ -1,0 +1,38 @@
+services:
+  # Backend (Express / Node.js API)
+  - type: web
+    name: meeting-app-backend
+    env: node
+    buildCommand: "npm install"
+    startCommand: "npm run dev"
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false
+      - key: STREAM_API_KEY
+        sync: false
+      - key: STREAM_API_SECRET
+        sync: false
+    autoDeploy: true
+    branch: main
+    region: oregon
+
+  # Frontend (React client)
+  - type: web
+    name: meeting-app-frontend
+    env: static
+    buildCommand: "npm install && npm run build"
+    staticPublishPath: client/build
+    plan: free
+    autoDeploy: true
+    branch: main
+    region: oregon
+
+databases:
+  - name: meeting-app-db
+    plan: free
+    databaseName: meetingapp
+    user: meetinguser
+    region: oregon
