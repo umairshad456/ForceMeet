@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
     "client": "npm run dev --prefix client",
-    "build": "npm install && npm install --prefix client && npm run build --prefix client",
+    "install": "npm install && npm install --prefix client && npm run build --prefix client",
     "start": "concurrently \"npm run dev\" \"npm run client\""
   },
   "keywords": [],
